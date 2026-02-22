@@ -13,4 +13,4 @@ Keep in mind the following things while translating:
 
 Since the job is large, do it in batches: 100 translations at a time. Prompt to continue after each batch.
 
-After each batch, generate a comparison html file using the script `generate_comparison_html.py`.
+After each batch, generate a comparison html file using the script `consolidate.py`.
