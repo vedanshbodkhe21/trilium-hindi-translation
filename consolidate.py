@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 
 def generate_comparison_html(en_file, hi_file, output_file):
     if not os.path.exists(en_file) or not os.path.exists(hi_file):
@@ -11,6 +12,25 @@ def generate_comparison_html(en_file, hi_file, output_file):
     
     with open(hi_file, 'r', encoding='utf-8') as f:
         hi_data = json.load(f)
+
+    # Fetch git changes
+    changed_keys = set()
+    try:
+        rel_hi_path = os.path.relpath(hi_file, os.getcwd())
+        # Try to get the previous version from git
+        result = subprocess.run(
+            ['git', 'show', f'HEAD:{rel_hi_path}'],
+            capture_output=True,
+            text=True,
+            encoding='utf-8'
+        )
+        if result.returncode == 0:
+            old_hi_data = json.loads(result.stdout)
+            for key, val in hi_data.items():
+                if old_hi_data.get(key) != val:
+                    changed_keys.add(key)
+    except Exception as e:
+        print(f"Warning: Git check failed ({e})")
 
     all_keys = sorted(en_data.keys())
 
@@ -34,6 +54,8 @@ def generate_comparison_html(en_file, hi_file, output_file):
             --border: #334155;
             --missing: #450a0a;
             --missing-text: #fca5a5;
+            --changed: #422006;
+            --changed-border: #713f12;
         }}
         
         body {{
@@ -105,6 +127,13 @@ def generate_comparison_html(en_file, hi_file, output_file):
             width: 25%;
         }}
 
+        .sno-cell {{
+            width: 4%;
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 1.2rem;
+        }}
+
         .en-cell {{
             width: 40%;
         }}
@@ -119,6 +148,14 @@ def generate_comparison_html(en_file, hi_file, output_file):
 
         .missing-row td {{
             border-bottom-color: #7f1d1d;
+        }}
+
+        .changed-row {{
+            background-color: var(--changed);
+        }}
+
+        .changed-row td {{
+            border-bottom-color: var(--changed-border);
         }}
 
         .empty-tag {{
@@ -155,6 +192,7 @@ def generate_comparison_html(en_file, hi_file, output_file):
     <table>
         <thead>
             <tr>
+                <th style="width: 50px; text-align: center;">#</th>
                 <th>Key Path</th>
                 <th>English (Source)</th>
                 <th>Hindi (Target)</th>
@@ -163,12 +201,21 @@ def generate_comparison_html(en_file, hi_file, output_file):
         <tbody>
 """
 
-    for key in all_keys:
+    for i, key in enumerate(all_keys, 1):
         en_val = en_data.get(key, "")
         hi_val = hi_data.get(key, "")
         
+        row_classes = []
         is_missing = not hi_val or hi_val.strip() == ""
-        row_class = ' class="missing-row"' if is_missing else ""
+        if is_missing:
+            row_classes.append("missing-row")
+        
+        is_changed = key in changed_keys
+        if is_changed:
+            row_classes.append("changed-row")
+            
+        row_class_attr = f' class="{" ".join(row_classes)}"' if row_classes else ""
+        
         hi_display = f'<span class="empty-tag">Missing Translation</span>' if is_missing else hi_val
         
         # Escape HTML
@@ -176,7 +223,8 @@ def generate_comparison_html(en_file, hi_file, output_file):
         hi_display = hi_display.replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>") if not is_missing else hi_display
 
         html_content += f"""
-            <tr{row_class}>
+            <tr{row_class_attr}>
+                <td class="sno-cell">{i}</td>
                 <td class="key-cell">{key}</td>
                 <td class="en-cell">{en_val}</td>
                 <td class="hi-cell">{hi_display}</td>
