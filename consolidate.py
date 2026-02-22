@@ -17,9 +17,9 @@ def generate_comparison_html(en_file, hi_file, output_file):
     changed_keys = set()
     try:
         rel_hi_path = os.path.relpath(hi_file, os.getcwd())
-        # Try to get the previous version from git
+        # Try to get the index version from git (unstaged diff source)
         result = subprocess.run(
-            ['git', 'show', f'HEAD:{rel_hi_path}'],
+            ['git', 'show', f':{rel_hi_path}'],
             capture_output=True,
             text=True,
             encoding='utf-8'
