@@ -10,3 +10,7 @@ Keep in mind the following things while translating:
 - dont be too pure or formal or too much "sarkari" in tone
 - translate the words - not widely known or which dont exist in hindi - as verbatim. like "database" becomes "डेटाबेस".
 - keep it simple, short and concise.
+
+Since the job is large, do it in batches: 100 translations at a time. Prompt to continue after each batch.
+
+After each batch, generate a comparison html file using the script `generate_comparison_html.py`.
