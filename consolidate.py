@@ -41,8 +41,9 @@ def generate_comparison_html(en_file, hi_file, output_file):
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 2rem;
-            line-height: 1.5;
+            padding: 4rem;
+            line-height: 1.6;
+            font-size: 1.75rem;
         }}
 
         header {{
@@ -52,17 +53,17 @@ def generate_comparison_html(en_file, hi_file, output_file):
 
         h1 {{
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 5rem;
+            margin-bottom: 1rem;
             background: linear-gradient(to right, #818cf8, #c084fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }}
 
         .stats {{
-            font-size: 0.9rem;
+            font-size: 1.5rem;
             color: var(--text-muted);
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }}
 
         table {{
@@ -99,9 +100,9 @@ def generate_comparison_html(en_file, hi_file, output_file):
 
         .key-cell {{
             font-family: monospace;
-            font-size: 0.85rem;
+            font-size: 1.5rem;
             color: #818cf8;
-            width: 20%;
+            width: 25%;
         }}
 
         .en-cell {{
@@ -122,11 +123,11 @@ def generate_comparison_html(en_file, hi_file, output_file):
 
         .empty-tag {{
             display: inline-block;
-            padding: 0.2rem 0.5rem;
+            padding: 0.4rem 0.8rem;
             background: #991b1b;
             color: white;
-            border-radius: 4px;
-            font-size: 0.7rem;
+            border-radius: 6px;
+            font-size: 1.2rem;
             font-weight: bold;
             text-transform: uppercase;
         }}
@@ -136,10 +137,10 @@ def generate_comparison_html(en_file, hi_file, output_file):
         }}
 
         footer {{
-            margin-top: 3rem;
+            margin-top: 5rem;
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 1.2rem;
         }}
     </style>
 </head>
