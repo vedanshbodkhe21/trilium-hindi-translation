@@ -1,1 +1,8 @@
+*.json
 *.html
+__pycache__/
+
+server/
+readme/
+client/
+website/

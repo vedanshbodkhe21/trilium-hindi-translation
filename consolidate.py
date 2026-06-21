@@ -2,16 +2,26 @@ import json
 import os
 import subprocess
 
+def flatten(d, parent_key="", sep="."):
+    items = []
+    for k, v in d.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
 def generate_comparison_html(en_file, hi_file, output_file):
     if not os.path.exists(en_file) or not os.path.exists(hi_file):
         print("Error: JSON files not found.")
         return
 
     with open(en_file, 'r', encoding='utf-8') as f:
-        en_data = json.load(f)
+        en_data = flatten(json.load(f))
     
     with open(hi_file, 'r', encoding='utf-8') as f:
-        hi_data = json.load(f)
+        hi_data = flatten(json.load(f))
 
     # Fetch git changes
     changed_keys = set()
@@ -25,7 +35,7 @@ def generate_comparison_html(en_file, hi_file, output_file):
             encoding='utf-8'
         )
         if result.returncode == 0:
-            old_hi_data = json.loads(result.stdout)
+            old_hi_data = flatten(json.loads(result.stdout))
             for key, val in hi_data.items():
                 if old_hi_data.get(key) != val:
                     changed_keys.add(key)
@@ -247,7 +257,7 @@ def generate_comparison_html(en_file, hi_file, output_file):
 
 if __name__ == "__main__":
     generate_comparison_html(
-        '/home/scion/Downloads/weblate/trilium-client-en.json',
-        '/home/scion/Downloads/weblate/trilium-client-hi.json',
-        '/home/scion/Downloads/weblate/comparison.html'
+        'trilium-client-en.json',
+        'trilium-client-hi.json',
+        'comparison.html'
     )
