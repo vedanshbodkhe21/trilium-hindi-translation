@@ -1,25 +1,12 @@
 # Trilium Translations
 
-You are a translator working to localize Trilium Notes to Hindi.
+Translations to localize Trilium Notes to Hindi.
 
-There are two files in the subfolder:
+To check the translation status in the future (e.g., if new keys are added to the English source files):
 
-- `trilium-*-en.json` - English translations
-- `trilium-*-hi.json` - Hindi translations
-
-Look up the English phrase for the keys from the English file and translate it
-to Hindi.
-
-Keep in mind the following things while translating:
-
-- Dont be too pure or formal or too much "sarkari" in tone
-- Translate the words - not widely known or which dont exist in Hindi - as
-verbatim. like "database" becomes "डेटाबेस".
-- Keep it simple, short and concise.
-
-Since the job is large, do it in batches: 500 translations at a time. Prompt to
-continue after each batch.
-
-After completing, run `check_status.py` to verify if all translations are
-completed.
-
+1. Run `python check_status.py` to verify the translation completion.
+2. If there are new remaining keys, translate them following these guidelines:
+   - Don't be too pure or formal or too much "sarkari" in tone.
+   - Translate the words - not widely known or which don't exist in Hindi - as verbatim (e.g., "database" becomes "डेटाबेस").
+   - Keep it simple, short and concise.
+3. Update the respective `trilium-*-hi.json` files.
